@@ -17,6 +17,7 @@ const langEn = [
   [
     { key: ['q'] },
     { key: ['w'] },
+    { key: ['e'] },
     { key: ['r'] },
     { key: ['t'] },
     { key: ['y'] },
@@ -196,42 +197,85 @@ class Keyboard {
     });
   };
 
+  arrowUpHandler() {
+    const event = new KeyboardEvent('keydown', {
+      view: 'window',
+      code: 'ArrowLeft',
+    });
+    const button = this.KeyboardContainer.querySelector(
+      '.keyboard__btn--arrowup'
+    );
+    button.dispatchEvent(event);
+  }
+
   onClickHandler() {
     this.buttons.forEach((button) => {
       button.addEventListener('click', () => {
+        const { code, key } = button.dataset;
         const val = this.textArea.value;
-        if (button.dataset.code === 'Space') {
-          if (this.pos === val.lenght) {
-            this.textArea.value += ' ';
-          }
+        if (code === 'Space') {
           this.insert(' ');
         }
-        if (button.dataset.code === 'Delete') {
-          if (this.pos === val.lenght) {
-            this.textArea.value += ' ';
-          }
-          this.insert(' ');
-        }
-        if (button.dataset.key) {
-          if (this.pos === val.lenght) {
-            this.textArea.value += button.dataset.key;
-          } else {
-            this.insert(button.dataset.key);
+        if (code === 'Delete') {
+          if (this.pos < val.length) {
+            this.delete(this.pos, this.pos + 1);
+            this.setPos(0);
           }
         }
-        this.pos += 1;
-        this.textArea.selectionStart = this.pos;
-        this.textArea.selectionEnd = this.pos;
+        if (code === 'Backspace') {
+          if (val.length > 0 && this.pos > 0) {
+            this.delete(this.pos - 1, this.pos);
+            this.setPos(-1);
+          }
+        }
+        if (code === 'ArrowLeft') {
+          if (val.length > 0 && this.pos > 0) {
+            this.setPos(-1);
+          }
+        }
+
+        if (code === 'ArrowRight') {
+          if (this.pos < val.length) {
+            this.setPos(1);
+          }
+        }
+        if (code === 'ArrowUp') {
+          this.insert('⬆️');
+          this.setPos(1);
+        }
+        if (code === 'ArrowDown') {
+          this.insert('⬇️');
+          this.setPos(1);
+        }
+        if (key) {
+          this.insert(key);
+          this.setPos(1);
+        }
         this.textArea.focus();
       });
     });
   }
 
+  setPos(n) {
+    this.pos += n;
+    this.textArea.selectionStart = this.pos;
+    this.textArea.selectionEnd = this.pos;
+  }
+
+  delete(pos1, pos2) {
+    const val = this.textArea.value;
+    this.textArea.value = `${val.slice(0, pos1)}${val.slice(pos2)}`;
+  }
+
   insert(value) {
     const val = this.textArea.value;
-    this.textArea.value = `${val.slice(0, this.pos)}${value}${val.slice(
-      this.pos
-    )}`;
+    if (this.pos === val.length) {
+      this.textArea.value += value;
+    } else {
+      this.textArea.value = `${val.slice(0, this.pos)}${value}${val.slice(
+        this.pos
+      )}`;
+    }
   }
 
   highligth(key, code) {

@@ -46,7 +46,7 @@ body {
   border-radius: 1em;
 }
 .display__text {
-  display: block;
+  display: inline-block;
   width: 100%;
   min-height: 40vh;
   resize: none;
