@@ -16,7 +16,7 @@ body {
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  gap: 4rem;
+  gap: 2rem;
 }
 
 .fixed {
@@ -24,6 +24,11 @@ body {
   inset: 0;
 }
 .heading {
+  text-align: center;
+  font-size: 4rem;
+  text-transform: uppercase;
+  padding: 2rem 0;
+  color: var(--bg-btn-meta);
 }
 
 .header,
@@ -32,6 +37,24 @@ body {
   width: 100%;
   max-width: 140rem;
   margin: 0 auto;
+}
+.display {
+  padding: 1rem;
+  border: 40px solid var(--bg-btn-meta);
+  border-radius: 1em;
+}
+.display__text {
+  display: block;
+  width: 100%;
+  min-height: 40vh;
+  resize: none;
+  padding: 1rem;
+  font-size: 3rem;
+  font-weight: 500;
+  outline: none;
+  border: 1px solid transparent;
+  color: #fff;
+  background-color: rgba(0, 0, 0, 0.9);
 }
 .keyboard {
   padding: 2rem 2rem;

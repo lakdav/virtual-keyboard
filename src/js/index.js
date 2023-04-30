@@ -126,7 +126,7 @@ class Keyboard {
        <h1 class="heading">Виртуалная клавиатура</h1>
      </header>
        <section class="${this.selectors.display}">
-         <textArea class="${this.selectors.display}__text"></textArea>
+         <textArea class="${this.selectors.display}__text" ></textArea>
        </section>
        <section class="${this.selectors.keyboard}" aria-label="Keyboard">
        </section>
