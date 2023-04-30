@@ -27,6 +27,8 @@ body {
   text-align: center;
   font-size: 4rem;
   text-transform: uppercase;
+  font-weight: bold;
+  letter-spacing: 0.06em;
   padding: 2rem 0;
   color: var(--bg-btn-meta);
 }
@@ -39,7 +41,7 @@ body {
   margin: 0 auto;
 }
 .display {
-  padding: 1rem;
+  padding: 0.4rem;
   border: 40px solid var(--bg-btn-meta);
   border-radius: 1em;
 }
@@ -96,7 +98,8 @@ body {
 .keyboard__btn:hover {
   box-shadow: 0 0 2px 3px #fff;
 }
-.keyboard__btn:active {
+.keyboard__btn:active,
+.keyboard__btn.active {
   box-shadow: 0 0 1px #fff, 0 -0 0 black;
   background: var(--active);
 }
@@ -139,10 +142,10 @@ body {
 .keyboard__btn--tab::after {
   content: 'Tab';
 }
-.keyboard__btn--del {
+.keyboard__btn--delete {
   flex: 6;
 }
-.keyboard__btn--del::after {
+.keyboard__btn--delete::after {
   content: 'del';
 }
 .keyboard__btn--capslock,

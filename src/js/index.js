@@ -63,7 +63,7 @@ const shiftRight = { code: 'ShiftRight' };
 const shiftLeft = { code: 'ShiftLeft' };
 const enter = { code: 'Enter' };
 const capsLock = { code: 'CapsLock' };
-const del = { code: 'Del' };
+const del = { code: 'Delete' };
 const tab = { code: 'Tab' };
 const controlLeft = { code: 'ControlLeft' };
 const controlRight = { code: 'ControlRight' };
@@ -113,11 +113,14 @@ class Keyboard {
     this.KeyboardContainer = null;
     this.textArea = null;
     this.selectors = { keyboard: 'keyboard', display: 'display' };
+    this.button = null;
   }
 
   init() {
     this.createPageLayout();
     this.createKeyboardLayout();
+    this.buttons = this.KeyboardContainer.querySelectorAll('.keyboard__btn');
+    this.KeyEventHandler();
   }
 
   createPageLayout() {
@@ -160,6 +163,48 @@ class Keyboard {
     }
   }
 
+  KeyEventHandler() {
+    window.addEventListener('keydown', (e) => {
+      e.preventDefault();
+    });
+    document.addEventListener('keydown', ({ key, code }) => {
+      let codeC = code;
+      if (code === 'NumpadEnter') {
+        codeC = 'Enter';
+      }
+      if (code === 'Numpad6') {
+        codeC = 'ArrowRight';
+      }
+      if (code === 'Numpad8') {
+        codeC = 'ArrowUp';
+      }
+      if (code === 'Numpad4') {
+        codeC = 'ArrowLeft';
+      }
+      if (code === 'Numpad2') {
+        codeC = 'ArrowDown';
+      }
+      if (code === ' NumpadDecimal') {
+        codeC = 'Delete';
+      }
+
+      console.log(key, code);
+      this.highligth(key, codeC);
+    });
+  }
+
+  highligth(key, code) {
+    const button = [...this.buttons].find(
+      (btn) => btn.dataset.key === key || btn.dataset.code === code
+    );
+    if (button) {
+      button.classList.add('active');
+      setTimeout(() => {
+        button.classList.remove('active');
+      }, 500);
+    }
+  }
+
   static createButton(item) {
     const button = document.createElement('div');
     button.className = 'keyboard__btn';
@@ -168,9 +213,11 @@ class Keyboard {
     if (key) {
       val = Keyboard.setKey(key);
       button.textContent = val;
+      button.setAttribute('data-key', val);
     } else {
       val = item?.code;
       button.classList.add(`keyboard__btn--${val.toLowerCase()}`);
+      button.setAttribute('data-code', val);
     }
     return button;
   }
