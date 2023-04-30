@@ -111,6 +111,7 @@ class Keyboard {
     this.keys = keys;
     this.value = '';
     this.KeyboardContainer = null;
+    this.pos = 0;
     this.textArea = null;
     this.selectors = { keyboard: 'keyboard', display: 'display' };
     this.button = null;
@@ -121,6 +122,10 @@ class Keyboard {
     this.createKeyboardLayout();
     this.buttons = this.KeyboardContainer.querySelectorAll('.keyboard__btn');
     this.KeyEventHandler();
+    this.onClickHandler();
+    this.textArea.addEventListener('click', () => {
+      this.pos = this.textArea.selectionStart;
+    });
   }
 
   createPageLayout() {
@@ -163,7 +168,7 @@ class Keyboard {
     }
   }
 
-  KeyEventHandler() {
+  KeyEventHandler = () => {
     window.addEventListener('keydown', (e) => {
       e.preventDefault();
     });
@@ -187,10 +192,46 @@ class Keyboard {
       if (code === ' NumpadDecimal') {
         codeC = 'Delete';
       }
-
-      console.log(key, code);
       this.highligth(key, codeC);
     });
+  };
+
+  onClickHandler() {
+    this.buttons.forEach((button) => {
+      button.addEventListener('click', () => {
+        const val = this.textArea.value;
+        if (button.dataset.code === 'Space') {
+          if (this.pos === val.lenght) {
+            this.textArea.value += ' ';
+          }
+          this.insert(' ');
+        }
+        if (button.dataset.code === 'Delete') {
+          if (this.pos === val.lenght) {
+            this.textArea.value += ' ';
+          }
+          this.insert(' ');
+        }
+        if (button.dataset.key) {
+          if (this.pos === val.lenght) {
+            this.textArea.value += button.dataset.key;
+          } else {
+            this.insert(button.dataset.key);
+          }
+        }
+        this.pos += 1;
+        this.textArea.selectionStart = this.pos;
+        this.textArea.selectionEnd = this.pos;
+        this.textArea.focus();
+      });
+    });
+  }
+
+  insert(value) {
+    const val = this.textArea.value;
+    this.textArea.value = `${val.slice(0, this.pos)}${value}${val.slice(
+      this.pos
+    )}`;
   }
 
   highligth(key, code) {
@@ -198,6 +239,7 @@ class Keyboard {
       (btn) => btn.dataset.key === key || btn.dataset.code === code
     );
     if (button) {
+      button.click();
       button.classList.add('active');
       setTimeout(() => {
         button.classList.remove('active');
