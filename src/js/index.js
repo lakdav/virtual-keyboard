@@ -72,18 +72,18 @@ const altLeft = { code: 'AltLeft' };
 const altRight = { code: 'AltRight' };
 const space = { code: 'Space' };
 const restOfButtons = [
-  'next',
   arraowUp,
   shiftRight,
+  'next',
   controlLeft,
   win,
   altLeft,
   space,
   altRight,
-  controlRight,
   arraowLeft,
   arraowDown,
   arraowRight,
+  controlRight,
 ];
 const keys = {
   en: [
@@ -170,7 +170,7 @@ class Keyboard {
       button.textContent = val;
     } else {
       val = item?.code;
-      button.classList.add(`keyboard__btn--${val}`);
+      button.classList.add(`keyboard__btn--${val.toLowerCase()}`);
     }
     return button;
   }

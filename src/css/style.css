@@ -5,7 +5,7 @@
 }
 :root {
   --bg-keyboard: #888888;
-  --bg-btn-meta: #222222;
+  --bg-btn-meta: rgb(66, 35, 13);
   --bg-btn: #444444;
 }
 html {
@@ -37,6 +37,7 @@ body {
   padding: 2rem 2rem;
   display: flex;
   flex-direction: column;
+  border: 10px solid var(--bg-btn-meta);
   gap: 1rem;
   box-shadow: 0 3px 3px rgba(0, 0, 0, 0.6);
   border-radius: 1em;
@@ -51,11 +52,13 @@ body {
   gap: 1rem;
 }
 .keyboard__btn {
+  --bg: radial-gradient(at center, var(--bg-btn), black);
+  --active: radial-gradient(at center, var(--bg-btn), var(--bg-btn));
   color: #fff;
-  background: radial-gradient(at center, var(--bg-btn), black);
-  font-size: 3.5rem;
-  min-width: 7rem;
-  min-height: 7rem;
+  background: var(--bg);
+  font-size: 3rem;
+  min-width: 8rem;
+  height: 7rem;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -65,13 +68,109 @@ body {
   cursor: pointer;
   transition: box-shadow 0.1s, background-color 0.1s;
   user-select: none;
+  position: relative;
 }
 .keyboard__btn:hover {
-  background-color: rgba(0, 128, 0, 0.4);
   box-shadow: 0 0 2px 3px #fff;
 }
 .keyboard__btn:active {
   box-shadow: 0 0 1px #fff, 0 -0 0 black;
-  background-color: rgba(0, 128, 0, 0.8);
-  background: radial-gradient(at center, var(--bg-btn), var(--bg-btn));
+  background: var(--active);
+}
+.keyboard__btn--backspace,
+.keyboard__btn--tab,
+.keyboard__btn--del,
+.keyboard__btn--capslock,
+.keyboard__btn--shiftleft,
+.keyboard__btn--enter,
+.keyboard__btn--shiftright,
+.keyboard__btn--space,
+.keyboard__btn--controlleft,
+.keyboard__btn--controlright,
+.keyboard__btn--window,
+.keyboard__btn--altleft,
+.keyboard__btn--altright {
+  --bg: var(--bg-btn-meta);
+  --active: rgba(66, 35, 13, 0.6);
+  background: var(--bg-btn-meta);
+}
+.keyboard__btn--arrowup,
+.keyboard__btn--arrowdown,
+.keyboard__btn--arrowleft,
+.keyboard__btn--arrowright {
+  --bg: radial-gradient(at center, var(--bg-btn-meta), var(--bg-btn));
+  --active: radial-gradient(at center, rgba(66, 35, 13, 0.6), var(--bg-btn));
+}
+.keyboard__btn--backspace {
+  flex: 12;
+}
+.keyboard__btn::after {
+  position: absolute;
+}
+.keyboard__btn--backspace::after {
+  content: 'Backspace';
+}
+.keyboard__btn--tab {
+  flex: 6;
+}
+.keyboard__btn--tab::after {
+  content: 'Tab';
+}
+.keyboard__btn--del {
+  flex: 6;
+}
+.keyboard__btn--del::after {
+  content: 'del';
+}
+.keyboard__btn--capslock,
+.keyboard__btn--shiftleft {
+  flex: 12;
+}
+.keyboard__btn--capslock::after {
+  content: 'Capslock';
+}
+.keyboard__btn--capslock.active::before {
+  background-color: green;
+}
+.keyboard__btn--enter,
+.keyboard__btn--shiftright {
+  min-width: 17rem;
+}
+.keyboard__btn--enter::after {
+  content: 'Enter';
+}
+
+.keyboard__btn--shiftleft::after,
+.keyboard__btn--shiftright::after {
+  content: 'Shift';
+}
+.keyboard__btn--space {
+  flex: 1;
+}
+.keyboard__btn--space::after {
+  content: 'Space';
+}
+
+.keyboard__btn--controlleft::after,
+.keyboard__btn--controlright::after {
+  content: 'Ctrl';
+}
+.keyboard__btn--altleft::after,
+.keyboard__btn--altright::after {
+  content: 'Alt';
+}
+.keyboard__btn--window::after {
+  content: 'Win';
+}
+.keyboard__btn--arrowleft::after {
+  content: '←';
+}
+.keyboard__btn--arrowup::after {
+  content: '↑';
+}
+.keyboard__btn--arrowdown::after {
+  content: '↓';
+}
+.keyboard__btn--arrowright::after {
+  content: '→';
 }
