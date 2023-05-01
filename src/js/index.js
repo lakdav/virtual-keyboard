@@ -166,10 +166,11 @@ const keys = {
 };
 class Keyboard {
   constructor() {
-    this.caps = false;
+    this.caps = localStorage.getItem('caps')
+      ? JSON.parse(localStorage.getItem('caps')).caps
+      : false;
     this.lang = 'en';
     this.keys = keys;
-    this.value = '';
     this.KeyboardContainer = null;
     this.pos = 0;
     this.textArea = null;
@@ -177,6 +178,7 @@ class Keyboard {
       keyboard: 'keyboard',
       display: 'display',
       button: 'keyboard__btn',
+      info: 'info',
     };
     this.button = null;
     this.KeyEventHandler = this.KeyEventHandler.bind(this);
@@ -185,6 +187,12 @@ class Keyboard {
   init() {
     this.createPageLayout();
     this.setKeyboardFunctionality();
+    this.textArea.value = localStorage.getItem('value')
+      ? localStorage.getItem('value')
+      : '';
+    if (this.textArea.value.length > 0) {
+      this.pos = this.textArea.value.length;
+    }
     this.textArea.addEventListener('click', () => {
       this.pos = this.textArea.selectionStart;
     });
@@ -200,12 +208,16 @@ class Keyboard {
   createPageLayout() {
     const pageHtmlStr = `
      <header class="header">
-       <h1 class="heading">Виртуалная клавиатура</h1>
+       <h1 class="heading">Виртуальная клавиатура</h1>
      </header>
        <section class="${this.selectors.display}">
          <textArea class="${this.selectors.display}__text" ></textArea>
        </section>
        <section class="${this.selectors.keyboard}" aria-label="Keyboard">
+       </section>
+       <section class="${this.selectors.info}" aria-label="Keyboard">
+       <p class="info__text">Клавиатура создана в операционной системе Linux</p>
+       <p class="info__text">Переключения языка: ctrl + alt</p>
        </section>
     `;
     document.body.insertAdjacentHTML('afterbegin', pageHtmlStr);
@@ -239,6 +251,10 @@ class Keyboard {
     const div = document.createElement('div');
     div.className = 'keyboard__row';
     return div;
+  }
+
+  saveValue() {
+    localStorage.setItem('value', this.textArea.value);
   }
 
   createButton(item) {
@@ -394,6 +410,7 @@ class Keyboard {
         }
         if (code === 'CapsLock') {
           this.caps = !this.caps;
+          localStorage.setItem('caps', JSON.stringify({ caps: this.caps }));
           this.caseHandler();
           if (this.caps) {
             button.classList.add('caps');
@@ -421,6 +438,7 @@ class Keyboard {
             this.setPos(1);
           }
         }
+        this.saveValue();
         this.textArea.focus();
       });
     });
