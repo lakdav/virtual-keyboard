@@ -169,7 +169,9 @@ class Keyboard {
     this.caps = localStorage.getItem('caps')
       ? JSON.parse(localStorage.getItem('caps')).caps
       : false;
-    this.lang = 'en';
+    this.lang = localStorage.getItem('lang')
+      ? localStorage.getItem('lang')
+      : 'en';
     this.keys = keys;
     this.KeyboardContainer = null;
     this.pos = 0;
@@ -346,6 +348,7 @@ class Keyboard {
 
   changeLang() {
     this.lang = this.lang === 'en' ? 'ru' : 'en';
+    localStorage.setItem('lang', this.lang);
     this.setKeyboardFunctionality();
   }
 
