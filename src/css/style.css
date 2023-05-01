@@ -95,7 +95,8 @@ body {
   user-select: none;
   position: relative;
 }
-.keyboard__btn:hover {
+.keyboard__btn:hover,
+.keyboard__btn.caps {
   box-shadow: 0 0 2px 3px #fff;
 }
 .keyboard__btn:active,

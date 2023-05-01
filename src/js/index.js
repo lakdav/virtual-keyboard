@@ -55,6 +55,48 @@ const langEn = [
     { code: 'Slash', key: ['/', '?'] },
   ],
 ];
+const langRu = [
+  [
+    { code: 'KeyQ', key: ['й'] },
+    { code: 'KeyE', key: ['ц'] },
+    { code: 'KeyE', key: ['у'] },
+    { code: 'KeyR', key: ['к'] },
+    { code: 'KeyT', key: ['е'] },
+    { code: 'KeyY', key: ['н'] },
+    { code: 'KeyU', key: ['г'] },
+    { code: 'KeyI', key: ['ш'] },
+    { code: 'KeyO', key: ['щ'] },
+    { code: 'KeyP', key: ['з'] },
+    { code: 'BracketLeft', key: ['х'] },
+    { code: 'BracketRight', key: ['ъ'] },
+    { code: 'Backslash', key: ['\\', '|'] },
+  ],
+  [
+    { code: 'KeyA', key: ['ф'] },
+    { code: 'KeyS', key: ['ы'] },
+    { code: 'KeyD', key: ['в'] },
+    { code: 'KeyF', key: ['а'] },
+    { code: 'KeyG', key: ['п'] },
+    { code: 'KeyH', key: ['р'] },
+    { code: 'KeyJ', key: ['о'] },
+    { code: 'KeyK', key: ['л'] },
+    { code: 'KeyL', key: ['д'] },
+    { code: 'Semicolon', key: ['ж'] },
+    { code: 'Quote', key: ['э'] },
+  ],
+  [
+    { code: 'KeyZ', key: ['я'] },
+    { code: 'KeyX', key: ['ч'] },
+    { code: 'KeyC', key: ['с'] },
+    { code: 'KeyV', key: ['м'] },
+    { code: 'KeyB', key: ['и'] },
+    { code: 'KeyN', key: ['т'] },
+    { code: 'KeyM', key: ['ь'] },
+    { code: 'Comma', key: ['б'] },
+    { code: 'Period', key: ['ю'] },
+    { code: 'Slash', key: ['/', '?'] },
+  ],
+];
 const Backspace = { code: 'Backspace' };
 const arraowUp = { code: 'ArrowUp' };
 const arraowLeft = { code: 'ArrowLeft' };
@@ -104,6 +146,23 @@ const keys = {
     ...langEn[2],
     ...restOfButtons,
   ],
+  ru: [
+    FirstLetterEn,
+    ...keysNumber,
+    Backspace,
+    'next',
+    tab,
+    ...langRu[0],
+    del,
+    'next',
+    capsLock,
+    ...langRu[1],
+    enter,
+    'next',
+    shiftLeft,
+    ...langRu[2],
+    ...restOfButtons,
+  ],
 };
 class Keyboard {
   constructor() {
@@ -132,6 +191,7 @@ class Keyboard {
   }
 
   setKeyboardFunctionality() {
+    this.KeyboardContainer.innerHTML = '';
     this.createKeyboardLayout();
     this.onClickHandler();
     this.KeyEventHandler();
@@ -225,10 +285,15 @@ class Keyboard {
     window.onkeydown = (e) => {
       e.preventDefault();
     };
-    document.onkeydown = ({ code }) => {
+    document.onkeydown = ({ code, ctrlKey }) => {
       let codeC = code;
       if (code === 'NumpadEnter') {
         codeC = 'Enter';
+      }
+      if (code === 'AltLeft' || code === 'AltRight') {
+        if (ctrlKey) {
+          this.changeLang();
+        }
       }
       if (code === 'Numpad6') {
         codeC = 'ArrowRight';
@@ -254,7 +319,6 @@ class Keyboard {
         Keyboard.highligth(button);
         button.click();
       }
-      console.log(code);
     };
     document.onkeyup = ({ code }) => {
       if (code === 'ShiftLeft' || code === 'ShiftRight') {
@@ -262,6 +326,11 @@ class Keyboard {
         this.caseHandler();
       }
     };
+  }
+
+  changeLang() {
+    this.lang = this.lang === 'en' ? 'ru' : 'en';
+    this.setKeyboardFunctionality();
   }
 
   arrowUpHandler() {
@@ -326,6 +395,11 @@ class Keyboard {
         if (code === 'CapsLock') {
           this.caps = !this.caps;
           this.caseHandler();
+          if (this.caps) {
+            button.classList.add('caps');
+          } else {
+            button.classList.remove('caps');
+          }
         }
         if (code === 'ArrowRight') {
           if (this.pos < value.length) {
