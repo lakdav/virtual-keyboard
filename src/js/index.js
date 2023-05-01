@@ -1,58 +1,58 @@
-const FirstLetterEn = { key: ['`', '~'] };
+const FirstLetterEn = { code: 'Backquote', key: ['`', '~'] };
 const keysNumber = [
-  { key: ['1', '!'] },
-  { key: ['2', '@'] },
-  { key: ['3', '#'] },
-  { key: ['4', '$'] },
-  { key: ['5', '%'] },
-  { key: ['6', '^'] },
-  { key: ['7', '&'] },
-  { key: ['8', '*'] },
-  { key: ['9', '('] },
-  { key: ['0', ')'] },
-  { key: ['-', '_'] },
-  { key: ['=', '+'] },
+  { code: 'Digit1', key: ['1', '!'] },
+  { code: 'Digit2', key: ['2', '@'] },
+  { code: 'Digit3', key: ['3', '#'] },
+  { code: 'Digit4', key: ['4', '$'] },
+  { code: 'Digit5', key: ['5', '%'] },
+  { code: 'Digit6', key: ['6', '^'] },
+  { code: 'Digit7', key: ['7', '&'] },
+  { code: 'Digit8', key: ['8', '*'] },
+  { code: 'Digit9', key: ['9', '('] },
+  { code: 'Digit0', key: ['0', ')'] },
+  { code: 'Minus', key: ['-', '_'] },
+  { code: 'Equal', key: ['=', '+'] },
 ];
 const langEn = [
   [
-    { key: ['q'] },
-    { key: ['w'] },
-    { key: ['e'] },
-    { key: ['r'] },
-    { key: ['t'] },
-    { key: ['y'] },
-    { key: ['u'] },
-    { key: ['i'] },
-    { key: ['o'] },
-    { key: ['p'] },
-    { key: ['[', '{'] },
-    { key: [']', '}'] },
-    { key: ['\\', '|'] },
+    { code: 'KeyQ', key: ['q'] },
+    { code: 'KeyE', key: ['w'] },
+    { code: 'KeyE', key: ['e'] },
+    { code: 'KeyR', key: ['r'] },
+    { code: 'KeyT', key: ['t'] },
+    { code: 'KeyY', key: ['y'] },
+    { code: 'KeyU', key: ['u'] },
+    { code: 'KeyI', key: ['i'] },
+    { code: 'KeyO', key: ['o'] },
+    { code: 'KeyP', key: ['p'] },
+    { code: 'BracketLeft', key: ['[', '{'] },
+    { code: 'BracketRight', key: [']', '}'] },
+    { code: 'Backslash', key: ['\\', '|'] },
   ],
   [
-    { key: ['a'] },
-    { key: ['s'] },
-    { key: ['d'] },
-    { key: ['f'] },
-    { key: ['g'] },
-    { key: ['h'] },
-    { key: ['j'] },
-    { key: ['k'] },
-    { key: ['l'] },
-    { key: [';', ':'] },
-    { key: ["'", '"'] },
+    { code: 'KeyA', key: ['a'] },
+    { code: 'KeyS', key: ['s'] },
+    { code: 'KeyD', key: ['d'] },
+    { code: 'KeyF', key: ['f'] },
+    { code: 'KeyG', key: ['g'] },
+    { code: 'KeyH', key: ['h'] },
+    { code: 'KeyJ', key: ['j'] },
+    { code: 'KeyK', key: ['k'] },
+    { code: 'KeyL', key: ['l'] },
+    { code: 'Semicolon', key: [';', ':'] },
+    { code: 'Quote', key: ["'", '"'] },
   ],
   [
-    { key: ['z'] },
-    { key: ['x'] },
-    { key: ['c'] },
-    { key: ['v'] },
-    { key: ['b'] },
-    { key: ['n'] },
-    { key: ['m'] },
-    { key: [',', '<'] },
-    { key: ['.', '>'] },
-    { key: ['/', '?'] },
+    { code: 'KeyZ', key: ['z'] },
+    { code: 'KeyX', key: ['x'] },
+    { code: 'KeyC', key: ['c'] },
+    { code: 'KeyV', key: ['v'] },
+    { code: 'KeyB', key: ['b'] },
+    { code: 'KeyN', key: ['n'] },
+    { code: 'KeyM', key: ['m'] },
+    { code: 'Comma', key: [',', '<'] },
+    { code: 'Comma', key: ['.', '>'] },
+    { code: 'Slash', key: ['/', '?'] },
   ],
 ];
 const Backspace = { code: 'Backspace' };
@@ -111,22 +111,31 @@ class Keyboard {
     this.lang = 'en';
     this.keys = keys;
     this.value = '';
+    this.shift = false;
     this.KeyboardContainer = null;
     this.pos = 0;
     this.textArea = null;
-    this.selectors = { keyboard: 'keyboard', display: 'display' };
+    this.selectors = {
+      keyboard: 'keyboard',
+      display: 'display',
+      button: 'keyboard__btn',
+    };
     this.button = null;
+    this.KeyEventHandler = this.KeyEventHandler.bind(this);
   }
 
   init() {
     this.createPageLayout();
-    this.createKeyboardLayout();
-    this.buttons = this.KeyboardContainer.querySelectorAll('.keyboard__btn');
-    this.KeyEventHandler();
-    this.onClickHandler();
+    this.setKeyboardFunctionality();
     this.textArea.addEventListener('click', () => {
       this.pos = this.textArea.selectionStart;
     });
+  }
+
+  setKeyboardFunctionality() {
+    this.createKeyboardLayout();
+    this.onClickHandler();
+    this.KeyEventHandler();
   }
 
   createPageLayout() {
@@ -149,31 +158,75 @@ class Keyboard {
     );
   }
 
-  createKeyboardLayout() {
+  createKeyboardLayout = () => {
     const fragment = document.createDocumentFragment();
-    let div = document.createElement('div');
-    div.className = 'keyboard__row';
+    let div = Keyboard.createRow();
     const lang = this.keys[this.lang];
-
     for (let i = 0; i < lang.length; i += 1) {
       if (typeof lang[i] === 'string' && lang[i] === 'next') {
         fragment.append(div);
-        div = document.createElement('div');
-        div.className = 'keyboard__row';
+        div = Keyboard.createRow();
       } else {
-        const btn = Keyboard.createButton(lang[i]);
+        const btn = this.createButton(lang[i]);
         div.append(btn);
       }
       fragment.append(div);
       this.KeyboardContainer.append(fragment);
     }
+    this.buttons = this.KeyboardContainer.querySelectorAll('.keyboard__btn');
+  };
+
+  static createRow() {
+    const div = document.createElement('div');
+    div.className = 'keyboard__row';
+    return div;
   }
 
-  KeyEventHandler = () => {
-    window.addEventListener('keydown', (e) => {
+  createButton(item) {
+    const { code, key } = item;
+    const button = this.createButtonEl();
+    let val = '';
+    if (key) {
+      val = this.buttonKey(key);
+      button.textContent = val;
+      button.setAttribute('data-key', key.join(''));
+    }
+    button.classList.add(`keyboard__btn--${code.toLowerCase()}`);
+    button.setAttribute('data-code', code);
+    return button;
+  }
+
+  createButtonEl() {
+    const button = document.createElement('div');
+    button.className = this.selectors.button;
+    return button;
+  }
+
+  buttonKey(item) {
+    let val = '';
+    if (this.caps) {
+      if (item.length === 2) {
+        val = item.at(1);
+      } else {
+        val = item.at(0).toUpperCase();
+      }
+    } else {
+      val = item.at(0);
+    }
+    return val;
+  }
+
+  KeyEventHandler() {
+    if (window.onkeydown) {
+      window.onkeydown = null;
+    }
+    if (document.onkeydown) {
+      document.onkeydown = null;
+    }
+    window.onkeydown = (e) => {
       e.preventDefault();
-    });
-    document.addEventListener('keydown', ({ key, code }) => {
+    };
+    document.onkeydown = ({ code }) => {
       let codeC = code;
       if (code === 'NumpadEnter') {
         codeC = 'Enter';
@@ -193,9 +246,13 @@ class Keyboard {
       if (code === ' NumpadDecimal') {
         codeC = 'Delete';
       }
-      this.highligth(key, codeC);
-    });
-  };
+      const button = this.search(codeC);
+      if (button) {
+        Keyboard.highligth(button);
+        button.click();
+      }
+    };
+  }
 
   arrowUpHandler() {
     const event = new KeyboardEvent('keydown', {
@@ -212,30 +269,42 @@ class Keyboard {
     this.buttons.forEach((button) => {
       button.addEventListener('click', () => {
         const { code, key } = button.dataset;
-        const val = this.textArea.value;
+        const [value] = [this.textArea.value];
         if (code === 'Space') {
           this.insert(' ');
+          this.setPos(1);
         }
         if (code === 'Delete') {
-          if (this.pos < val.length) {
+          if (this.pos < value.length) {
             this.delete(this.pos, this.pos + 1);
             this.setPos(0);
           }
         }
         if (code === 'Backspace') {
-          if (val.length > 0 && this.pos > 0) {
+          if (value.length > 0 && this.pos > 0) {
             this.delete(this.pos - 1, this.pos);
             this.setPos(-1);
           }
         }
         if (code === 'ArrowLeft') {
-          if (val.length > 0 && this.pos > 0) {
+          if (value.length > 0 && this.pos > 0) {
             this.setPos(-1);
           }
         }
-
+        if (code === 'Tab') {
+          this.insert('\t');
+          this.setPos(1);
+        }
+        if (code === 'Enter') {
+          this.insert('\n');
+          this.setPos(1);
+        }
+        if (code === 'CapsLock') {
+          this.caps = !this.caps;
+          this.capesHandler();
+        }
         if (code === 'ArrowRight') {
-          if (this.pos < val.length) {
+          if (this.pos < value.length) {
             this.setPos(1);
           }
         }
@@ -247,13 +316,58 @@ class Keyboard {
           this.insert('⬇️');
           this.setPos(1);
         }
+
         if (key) {
-          this.insert(key);
-          this.setPos(1);
+          const val = this.getVal(key);
+          if (val) {
+            this.insert(val);
+            this.setPos(1);
+          }
         }
         this.textArea.focus();
       });
     });
+  }
+
+  capesHandler() {
+    this.buttons.forEach((button) => {
+      const k = button.dataset.key;
+      if (k) {
+        let text = '';
+        if (this.caps || this.shift) {
+          if (k.length === 2) {
+            [text] = [k[1]];
+            // eslint-disable-next-line no-param-reassign
+            button.textContent = text;
+          } else {
+            [text] = [k[0]];
+            // eslint-disable-next-line no-param-reassign
+            button.textContent = text.toUpperCase();
+          }
+        } else {
+          [text] = [k[0]];
+          // eslint-disable-next-line no-param-reassign
+          button.textContent = text;
+        }
+      }
+    });
+  }
+
+  getVal(key) {
+    if (key) {
+      let val = '';
+      if (this.caps) {
+        if (key.length === 2) {
+          [val] = [key[1]];
+        } else {
+          val = key[0].toUpperCase();
+        }
+      } else {
+        [val] = [key[0]];
+      }
+      return val;
+    }
+    return undefined;
   }
 
   setPos(n) {
@@ -278,47 +392,15 @@ class Keyboard {
     }
   }
 
-  highligth(key, code) {
-    const button = [...this.buttons].find(
-      (btn) => btn.dataset.key === key || btn.dataset.code === code
-    );
-    if (button) {
-      button.click();
-      button.classList.add('active');
-      setTimeout(() => {
-        button.classList.remove('active');
-      }, 500);
-    }
+  search(code) {
+    return [...this.buttons].find((btn) => btn.dataset.code === code);
   }
 
-  static createButton(item) {
-    const button = document.createElement('div');
-    button.className = 'keyboard__btn';
-    const key = item?.key;
-    let val = '';
-    if (key) {
-      val = Keyboard.setKey(key);
-      button.textContent = val;
-      button.setAttribute('data-key', val);
-    } else {
-      val = item?.code;
-      button.classList.add(`keyboard__btn--${val.toLowerCase()}`);
-      button.setAttribute('data-code', val);
-    }
-    return button;
-  }
-
-  static setKey(keysArr, caps) {
-    let key = '';
-    if (caps) {
-      if (keysArr[1]) {
-        [, key] = keysArr[(0, 1)];
-      }
-      key = keysArr[0].toUppercase();
-    } else {
-      [key] = keysArr.at(0);
-    }
-    return key;
+  static highligth(button) {
+    button.classList.add('active');
+    setTimeout(() => {
+      button.classList.remove('active');
+    }, 500);
   }
 }
 
