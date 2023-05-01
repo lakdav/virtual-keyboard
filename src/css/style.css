@@ -25,11 +25,11 @@ body {
 }
 .heading {
   text-align: center;
-  font-size: 4rem;
+  font-size: 2rem;
   text-transform: uppercase;
   font-weight: bold;
   letter-spacing: 0.06em;
-  padding: 2rem 0;
+  padding: 1rem 0;
   color: var(--bg-btn-meta);
 }
 
@@ -42,16 +42,16 @@ body {
 }
 .display {
   padding: 0.4rem;
-  border: 40px solid var(--bg-btn-meta);
+  border: 20px solid var(--bg-btn-meta);
   border-radius: 1em;
 }
 .display__text {
   display: block;
   width: 100%;
-  min-height: 40vh;
+  min-height: 30vh;
   resize: none;
   padding: 1rem;
-  font-size: 3rem;
+  font-size: 2rem;
   font-weight: 500;
   outline: none;
   border: 1px solid transparent;
@@ -83,7 +83,7 @@ body {
   background: var(--bg);
   font-size: 3rem;
   min-width: 8rem;
-  height: 7rem;
+  height: 6rem;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -205,7 +205,7 @@ body {
   padding: 1rem;
 }
 .info__text {
-  font-size: 2rem;
+  font-size: 1.6rem;
   font-style: italic;
   font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
     Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
