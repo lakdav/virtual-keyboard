@@ -11,6 +11,29 @@
 html {
   font-size: 62.5%;
 }
+html {
+  font-size: calc(1vw - 7px);
+}
+@media screen and (max-width: 1400px) {
+  html {
+    font-size: calc(1vw - 4px);
+  }
+}
+@media screen and (max-width: 1200px) {
+  html {
+    font-size: calc(1vw - 4px);
+  }
+}
+@media screen and (max-width: 1000px) {
+  html {
+    font-size: calc(1vw - 3px);
+  }
+}
+@media screen and (max-width: 800px) {
+  html {
+    font-size: calc(1vw - 2px);
+  }
+}
 body {
   font-size: 1.6rem;
   box-sizing: border-box;
@@ -81,7 +104,7 @@ body {
   --active: radial-gradient(at center, var(--bg-btn), var(--bg-btn));
   color: #fff;
   background: var(--bg);
-  font-size: 3rem;
+  font-size: 2.5rem;
   min-width: 8rem;
   height: 6rem;
   display: flex;
@@ -147,7 +170,7 @@ body {
   flex: 6;
 }
 .keyboard__btn--delete::after {
-  content: 'del';
+  content: 'Del';
 }
 .keyboard__btn--capslock,
 .keyboard__btn--shiftleft {
