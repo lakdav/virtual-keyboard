@@ -51,7 +51,7 @@ const langEn = [
     { code: 'KeyN', key: ['n'] },
     { code: 'KeyM', key: ['m'] },
     { code: 'Comma', key: [',', '<'] },
-    { code: 'Comma', key: ['.', '>'] },
+    { code: 'Period', key: ['.', '>'] },
     { code: 'Slash', key: ['/', '?'] },
   ],
 ];
@@ -111,7 +111,6 @@ class Keyboard {
     this.lang = 'en';
     this.keys = keys;
     this.value = '';
-    this.shift = false;
     this.KeyboardContainer = null;
     this.pos = 0;
     this.textArea = null;
@@ -243,13 +242,24 @@ class Keyboard {
       if (code === 'Numpad2') {
         codeC = 'ArrowDown';
       }
-      if (code === ' NumpadDecimal') {
+      if (code === 'NumpadDecimal') {
         codeC = 'Delete';
+      }
+      if (code === 'ShiftLeft' || code === 'ShiftRight') {
+        this.caps = true;
+        this.caseHandler();
       }
       const button = this.search(codeC);
       if (button) {
         Keyboard.highligth(button);
         button.click();
+      }
+      console.log(code);
+    };
+    document.onkeyup = ({ code }) => {
+      if (code === 'ShiftLeft' || code === 'ShiftRight') {
+        this.caps = false;
+        this.caseHandler();
       }
     };
   }
@@ -267,6 +277,20 @@ class Keyboard {
 
   onClickHandler() {
     this.buttons.forEach((button) => {
+      if (
+        button.dataset.code === 'ShiftLeft' ||
+        button.dataset.code === 'ShiftRight'
+      ) {
+        button.addEventListener('mousedown', () => {
+          this.caps = true;
+          this.caseHandler();
+        });
+        button.addEventListener('mouseup', () => {
+          this.caps = false;
+          this.caseHandler();
+        });
+      }
+
       button.addEventListener('click', () => {
         const { code, key } = button.dataset;
         const [value] = [this.textArea.value];
@@ -301,7 +325,7 @@ class Keyboard {
         }
         if (code === 'CapsLock') {
           this.caps = !this.caps;
-          this.capesHandler();
+          this.caseHandler();
         }
         if (code === 'ArrowRight') {
           if (this.pos < value.length) {
@@ -316,7 +340,6 @@ class Keyboard {
           this.insert('⬇️');
           this.setPos(1);
         }
-
         if (key) {
           const val = this.getVal(key);
           if (val) {
@@ -329,12 +352,12 @@ class Keyboard {
     });
   }
 
-  capesHandler() {
+  caseHandler() {
     this.buttons.forEach((button) => {
       const k = button.dataset.key;
       if (k) {
         let text = '';
-        if (this.caps || this.shift) {
+        if (this.caps) {
           if (k.length === 2) {
             [text] = [k[1]];
             // eslint-disable-next-line no-param-reassign
