@@ -1,4 +1,5 @@
 const FirstLetterEn = { code: 'Backquote', key: ['`', '~'] };
+const FirstLetterRu = { code: 'Backquote', key: ['ё'] };
 const keysNumber = [
   { code: 'Digit1', key: ['1', '!'] },
   { code: 'Digit2', key: ['2', '@'] },
@@ -16,7 +17,7 @@ const keysNumber = [
 const langEn = [
   [
     { code: 'KeyQ', key: ['q'] },
-    { code: 'KeyE', key: ['w'] },
+    { code: 'KeyW', key: ['w'] },
     { code: 'KeyE', key: ['e'] },
     { code: 'KeyR', key: ['r'] },
     { code: 'KeyT', key: ['t'] },
@@ -58,7 +59,7 @@ const langEn = [
 const langRu = [
   [
     { code: 'KeyQ', key: ['й'] },
-    { code: 'KeyE', key: ['ц'] },
+    { code: 'KeyW', key: ['ц'] },
     { code: 'KeyE', key: ['у'] },
     { code: 'KeyR', key: ['к'] },
     { code: 'KeyT', key: ['е'] },
@@ -110,7 +111,7 @@ const del = { code: 'Delete' };
 const tab = { code: 'Tab' };
 const controlLeft = { code: 'ControlLeft' };
 const controlRight = { code: 'ControlRight' };
-const win = { code: 'window' };
+const win = { code: 'Window' };
 const altLeft = { code: 'AltLeft' };
 const altRight = { code: 'AltRight' };
 const space = { code: 'Space' };
@@ -147,7 +148,7 @@ const keys = {
     ...restOfButtons,
   ],
   ru: [
-    FirstLetterEn,
+    FirstLetterRu,
     ...keysNumber,
     Backspace,
     'next',
@@ -496,7 +497,7 @@ class Keyboard {
 
   delete(pos1, pos2) {
     const val = this.textArea.value;
-    this.textArea.value = `${val.slice(0, pos1)}${val.slice(pos2)}`;
+    this.textArea.value = [...val.slice(0, pos1), ...val.slice(pos2)].join('');
   }
 
   insert(value) {
