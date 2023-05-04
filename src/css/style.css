@@ -1,0 +1,233 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: inherit;
+}
+:root {
+  --bg-keyboard: #888888;
+  --bg-btn-meta: rgb(66, 35, 13);
+  --bg-btn: #444444;
+}
+html {
+  font-size: calc(1vw - 7px);
+}
+@media screen and (max-width: 1400px) {
+  html {
+    font-size: calc(1vw - 4px);
+  }
+}
+@media screen and (max-width: 1200px) {
+  html {
+    font-size: calc(1vw - 4px);
+  }
+}
+@media screen and (max-width: 1000px) {
+  html {
+    font-size: calc(1vw - 3px);
+  }
+}
+@media screen and (max-width: 800px) {
+  html {
+    font-size: calc(1vw - 2px);
+  }
+}
+
+body {
+  font-size: 1.6rem;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.fixed {
+  position: fixed;
+  inset: 0;
+}
+.heading {
+  text-align: center;
+  font-size: 2rem;
+  text-transform: uppercase;
+  font-weight: bold;
+  letter-spacing: 0.06em;
+  padding: 1rem 0;
+  color: var(--bg-btn-meta);
+}
+
+.header,
+.display,
+.keyboard {
+  width: 100%;
+  max-width: 140rem;
+  margin: 0 auto;
+}
+.display {
+  padding: 0.4rem;
+  border: 20px solid var(--bg-btn-meta);
+  border-radius: 1em;
+}
+.display__text {
+  display: block;
+  width: 100%;
+  min-height: 30vh;
+  resize: none;
+  padding: 1rem;
+  font-size: 2rem;
+  font-weight: 500;
+  outline: none;
+  border: 1px solid transparent;
+  color: #fff;
+  background-color: rgba(0, 0, 0, 0.9);
+}
+.keyboard {
+  padding: 2rem 2rem;
+  display: flex;
+  flex-direction: column;
+  border: 10px solid var(--bg-btn-meta);
+  gap: 1rem;
+  box-shadow: 0 3px 3px rgba(0, 0, 0, 0.6);
+  border-radius: 1em;
+  background-image: radial-gradient(
+    at top left,
+    var(--bg-btn),
+    rgba(0, 0, 0, 0.346)
+  );
+}
+.keyboard__row {
+  display: flex;
+  gap: 1rem;
+}
+.keyboard__btn {
+  --bg: radial-gradient(at center, var(--bg-btn), black);
+  --active: radial-gradient(at center, var(--bg-btn), var(--bg-btn));
+  color: #fff;
+  background: var(--bg);
+  font-size: 2.5rem;
+  flex: 0 1 8rem;
+  height: 6rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.2em;
+  box-shadow: 0 4px 4px black;
+  font-weight: bold;
+  cursor: pointer;
+  transition: box-shadow 0.1s, background-color 0.1s;
+  user-select: none;
+  position: relative;
+}
+.keyboard__btn:hover,
+.keyboard__btn.caps {
+  box-shadow: 0 0 2px 3px #fff;
+}
+.keyboard__btn:active,
+.keyboard__btn.active {
+  box-shadow: 0 0 1px #fff, 0 -0 0 black;
+  background: var(--active);
+}
+.keyboard__btn--backspace,
+.keyboard__btn--tab,
+.keyboard__btn--delete,
+.keyboard__btn--capslock,
+.keyboard__btn--shiftleft,
+.keyboard__btn--enter,
+.keyboard__btn--shiftright,
+.keyboard__btn--space,
+.keyboard__btn--controlleft,
+.keyboard__btn--controlright,
+.keyboard__btn--window,
+.keyboard__btn--altleft,
+.keyboard__btn--altright {
+  --bg: var(--bg-btn-meta);
+  --active: rgba(66, 35, 13, 0.6);
+  background: var(--bg-btn-meta);
+}
+.keyboard__btn--arrowup,
+.keyboard__btn--arrowdown,
+.keyboard__btn--arrowleft,
+.keyboard__btn--arrowright {
+  --bg: radial-gradient(at center, var(--bg-btn-meta), var(--bg-btn));
+  --active: radial-gradient(at center, rgba(66, 35, 13, 0.6), var(--bg-btn));
+}
+.keyboard__btn--backspace {
+  flex: 12;
+}
+.keyboard__btn::after {
+  position: absolute;
+}
+.keyboard__btn--backspace::after {
+  content: 'Backspace';
+}
+.keyboard__btn--tab {
+  flex: 6;
+}
+.keyboard__btn--tab::after {
+  content: 'Tab';
+}
+.keyboard__btn--delete {
+  flex: 6;
+}
+.keyboard__btn--delete::after {
+  content: 'Del';
+}
+.keyboard__btn--capslock,
+.keyboard__btn--shiftleft {
+  flex: 12;
+}
+.keyboard__btn--capslock::after {
+  content: 'Capslock';
+}
+.keyboard__btn--capslock.active::before {
+  background-color: green;
+}
+.keyboard__btn--enter,
+.keyboard__btn--shiftright {
+  min-width: 17rem;
+}
+.keyboard__btn--enter::after {
+  content: 'Enter';
+}
+
+.keyboard__btn--shiftleft::after,
+.keyboard__btn--shiftright::after {
+  content: 'Shift';
+}
+.keyboard__btn--space {
+  flex: 1;
+}
+.keyboard__btn--space::after {
+  content: 'Space';
+}
+
+.keyboard__btn--controlleft::after,
+.keyboard__btn--controlright::after {
+  content: 'Ctrl';
+}
+.keyboard__btn--altleft::after,
+.keyboard__btn--altright::after {
+  content: 'Alt';
+}
+.keyboard__btn--window::after {
+  content: 'Win';
+}
+.keyboard__btn--arrowleft::after {
+  content: '←';
+}
+.keyboard__btn--arrowup::after {
+  content: '↑';
+}
+.keyboard__btn--arrowdown::after {
+  content: '↓';
+}
+.keyboard__btn--arrowright::after {
+  content: '→';
+}
+.info {
+  padding: 1rem;
+}
+.info__text {
+  font-size: 1.6rem;
+  font-style: italic;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+    Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
